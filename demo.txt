@@ -1,0 +1,58 @@
+customer: 1
+first Name: Jon
+Middle Name: al
+Last Name : David
+
+sha(256,JonalDavid)
+
+
+Customer 2:
+first Name: Jona
+Middle Name: l
+Last Name : David 
+
+sha(256,JonalDavid);
+
+
+sha2(256, iifNull(Title,'') +FirstName +iifNull(MiddleName,'') +LastName +iifNull(Suffix,'') +iifNull(CompanyName,'') +iifNull(SalesPerson,'') +iifNull(EmailAddress,'') +iifNull(Phone,''))
+
+--------------------------------------------------------------
+
+create  table person
+(
+
+firstName varchar(255),
+middleName varchar(255),
+LastName varchar(255)
+--,phone varchar(255)
+);
+
+INSERT INTO person
+VALUES ('Jon','al','David','957629886')
+INSERT INTO person
+VALUES ('Jona','l','David','849515755')
+
+
+---------------------------------------------------------
+
+
+declare 
+@customer1 varchar(10)= (select '1'),
+@firstName1 varchar(50)=  (Select 'Jon'),
+@MiddleName1 varchar(50)= (Select 'al'),
+@LastName1 varchar(50)= (Select 'David'),
+
+@customer2 varchar(10)= (select '2'),
+@firstName2 varchar(50)=  (Select 'Jona'),
+@MiddleName2 varchar(50)= (Select 'l'),
+@LastName2 varchar(50)= (Select 'David')
+
+select @customer1 Customer_ID, @firstName1 FirstName, @MiddleName1 MiddleName, @LastName1 LastName into dbo.Customer
+union 
+select @customer2, @firstName2, @MiddleName2, @LastName2 
+
+select * from dbo.Customer c
+
+select c.* , (isnull(firstName,'') +  isnull(middleName,'') +  isnull(LastName,'')) as  concatenatedColumn,
+HASHBYTES('SHA2_256',(isnull(firstName,'') +  isnull(middleName,'') +  isnull(LastName,'')) ) as hashKey
+from dbo.Customer c
